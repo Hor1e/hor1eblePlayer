@@ -1,4 +1,11 @@
 # hor1eblePlayer
-Music player written on Python. Works with downloaded tracks. Supported music files: .wav, .mp3
-CURRENTLY NOT WORKING!!!
-I will rework the whole player soon.
+Плеер для музыки, использует Soundcloud для работы. Будет загрузка треков и многие другие функции.
+Полный реворк начат.
+## Инструменты для реализации:
+> pyqt для графического интерфейса(вместо tkinter)
+> soundcloud-lib для музыки (вместо ручной загрузки, она также будет возможна)
+
+## Проект состоит из:
+> Кода
+> Будет база данных, не знаю зачем именно, но будет(есть пара идей)
+<img width="188" height="267" alt="изображение" src="https://github.com/user-attachments/assets/8b51cdbd-dea7-413c-9ff7-0554ea1d24c8" />
