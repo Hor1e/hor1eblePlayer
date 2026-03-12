@@ -4,7 +4,14 @@
 ## Инструменты для реализации:
 1.pyqt для графического интерфейса(вместо tkinter)
 
-2.soundcloud-lib для музыки (вместо ручной загрузки, она также будет возможна)
+2.~soundcloud~ Yandex-music-api(https://github.com/MarshalX/yandex-music-api) для музыки.
+Ручная загрузка будет доступна.
+
+Видит бог, я этого не хотел, но по техническим причинам теперь беру музыку из ЯМ, вместо СК.
+
+Причиной этому стала невозможность установки библиотеки.(error in fudge setup command: use_2to3 is invalid.) поможете - буду рад и реализую саундклауд.
+
+Почти неделю пытался фиксить, ничего не помогло.
 
 ## Проект состоит из:
 1.Кода на Python 
@@ -12,4 +19,4 @@
 2.Будет база данных, не знаю зачем именно, но будет(есть пара идей)
 
 
-<img width="188" height="267" alt="изображение" src="https://github.com/user-attachments/assets/8b51cdbd-dea7-413c-9ff7-0554ea1d24c8" />
+<img width="287" height="413" alt="{04E1D1CA-737A-4EAB-BE73-490BB268FF73}" src="https://github.com/user-attachments/assets/c874519b-e293-4f21-ba1b-3c49826eb3d3" />
