@@ -1,6 +1,6 @@
 #импорты
 from youtubesearchpython import VideosSearch as search
-import youtube_dl
+import yt_dlp
 
 
 #Переменная чтоб найти
@@ -29,10 +29,25 @@ class MusicManager:
     def downloadtrack(self):
         #вызываем метод, чтобы воспользоваться переменной из него
         self.getlink()
+        #настроечки для скачивания аудио
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192',
+            }],
+            'outtmpl': '%(title)s.%(ext)s',
+        }
+        #само скачивание
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([self.link])
 
         
 
 
 idk2 = MusicManager(idk)
+idk2.getlink()
+idk2.downloadtrack()
 
 
