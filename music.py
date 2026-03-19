@@ -50,7 +50,7 @@ class MusicManager:
             'format': 'bestaudio/best',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
-                'preferredcodec': 'mp3',
+                'preferredcodec': 'wav',
                 'preferredquality': '192',
             }],
             'outtmpl': f'{folder}/%(title)s.%(ext)s',
