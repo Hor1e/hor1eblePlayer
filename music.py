@@ -3,10 +3,9 @@ from youtubesearchpython import VideosSearch as search
 import yt_dlp
 import os
 
-#Переменная чтоб найти
-idk = f'кислород капсайз'
+
 #папка
-folder = 'tracks'
+folder = 'likes'
 #создание папки если ее нет
 if not os.path.exists(folder):
     os.makedirs(folder)
@@ -24,10 +23,11 @@ class MusicManager:
         
         music = search(self.name, limit=1)
         searchdict = music.result()
-        self.link =  searchdict['result'][0]['link']
         #сохранение перемеенной в self, для обращения к ней в другом методе
+        self.link =  searchdict['result'][0]['link']
         
-        print('Ссылка на скачивание: ', self.link)
+        
+        
         
         
         
@@ -37,13 +37,19 @@ class MusicManager:
         self.getlink()
         #настроечки для скачивания аудио
         ydl_opts = {
+            #скрытие того что он пишет
+            'quiet': True,
+            'no_warnings': True,
             #настройки подключения
             'source_address': '0.0.0.0', 
             'http_chunk_size': 262144,  
-            'retries': 100,               
+            'retries': 1,               
             'extractor_args': {
             'youtube': {
             'player_client': ['android', 'web'], # Использовать разные типы клиентов
+
+
+            
             }
             #настройка высасывания аудио
             },
@@ -53,12 +59,21 @@ class MusicManager:
                 'preferredcodec': 'wav',
                 'preferredquality': '192',
             }],
-            'outtmpl': f'{folder}/%(title)s.%(ext)s',
+            'outtmpl': f'%(title)s.%(ext)s',
                 
         }
         #само скачивание
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.link])
+
+            #получение конечного названия файла после конвертации в вав
+            info = ydl.extract_info(self.link, download=False)
+            filepath = ydl.prepare_filename(info)
+            filename = os.path.basename(filepath)
+            self.final_filename = os.path.splitext(filename)[0] + ".wav"
+
+            
+            
      
 
 
@@ -66,12 +81,6 @@ class MusicManager:
        
         
             
-        
-
-
-
-idk2 = MusicManager(idk)
-idk2.downloadtrack()
 
 
 

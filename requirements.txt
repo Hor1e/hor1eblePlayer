@@ -1,2 +1,8 @@
-youtube-search-python
-yt-dlp
+"youtube-search-python==1.6.6"
+"yt-dlp==2026.3.17"
+"httpx==0.27.2"
+"httpcore==1.0.9"
+"anyio==4.12.1"
+"certifi==2026.2.25"
+"h11==0.16.0"
+"simpleaudio==1.0.4"

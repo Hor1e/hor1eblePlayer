@@ -1,53 +1,60 @@
-import tkinter as tk
-import os
-import multiprocessing
-from function import grf
-from playsound import playsound
-
-root = tk.Tk()
-root.config(bg="gray5")
-root.title("")
-
-label = tk.Label(root, text="Hor1eblePlayer")
-label.pack()
-label2 = tk.Label(root, text=" ")
-label2.pack()
+#импорты
+from config import *
+from music import MusicManager
+import simpleaudio as sa
 
 
-def button_start():
-    global p
-    os.chdir("music")
-    directory_path = os.getcwd()
-    sound = grf(directory_path)
-    
-    if sound:
-        print(f"Случайный файл: {sound}")
-    else:
-        print("Папка пуста или не существует.")
-    p = multiprocessing.Process(target=playsound, args=(sound,))
-    p.start()
-    label2.config(text = sound)
-    
-    os.chdir("..")
-    
-def button_stop():
-    
-    p.terminate()
-    label2.config(text = "")
-    print(os.getcwd())
+#надпись-приветсвие, можете изменить на любой ascii арт или текст в config'е
+print(*greet, sep="\n")
 
-def scale_volume():
-    pass
+#выбираем действие
+option = int(input('Выберите действие:\n1)Найти трек  2)Плейлисты  3)Экспорт/Импорт плейлиста \n'))
 
-    
+
+#создаем класс
+class player:
+    #инит
+    def __init__(self):
+        pass
     
 
+    #метод для нахождения и воспроизведения трека
+    def play(self):
+        track = input('Введите название трека: ')
+        music = MusicManager(track)
+        music.downloadtrack()
+        #включение музычки
+        
+        wave_obj = sa.WaveObject.from_wave_file(music.final_filename)
+        play_obj = wave_obj.play()
+        play_obj.wait_done()
+        print('kdfsfjsfj')
+
+        
 
 
-button = tk.Button(root, text="click me to start music :3", command=button_start)
-button.pack()
-button2 = tk.Button(root, text="click me to stop music :3", command=button_stop)
-button2.pack()
-scale = tk.Scale(root, length = 100,from_=100,to=0, command=scale_volume)
-scale.pack()
-root.mainloop()
+
+
+
+Player = player()
+if option == 1:
+    Player.play()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
