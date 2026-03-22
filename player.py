@@ -6,32 +6,90 @@ import multiprocessing
 import time
 import os
 
+
+
 #создаем класс 
-class PlayerClass:
+class PlayerClass(MusicManager):
 
     #конструктор, все нановское потому что не передается ничо
     def __init__(self):
-        self.nowplaying = None
         self.plsound = None
-        self.music = None
+        
     #метод для нахождения и воспроизведения трека
     def play(self):
         track = input('Введите название трека: ')
-        self.music = MusicManager(track)
-        self.music.downloadtrack()
+        self.name = track
+        super().downloadtrack()
         #включение музычки
-        plsound = multiprocessing.Process(target=ps, args=(self.music.final_filename,))
+        plsound = multiprocessing.Process(target=ps, args=(self.final_filename,))
         plsound.start()
         self.plsound = plsound
 
-        #без этого не горит желанием работать код другой функции
-        self.nowplaying = self.music.final_filename
-
-        
-        
-        
+    #метод для перемещения в лайки
+    def track_to_likes(self):
+        os.remove(self.final_filename)
+        os.chdir('playlists')
+        super().downloadtrack_tofolder()
+        os.chdir('..')
         
     
+    def playlists(self):
+        if not os.path.exists('playlists'):
+            os.makedirs('playlists')
+        if not os.path.exists('playlists/likes'):
+            os.makedirs('likes')
+        
+        os.chdir('playlists')
+        playlistslist = os.listdir()
+        print('Доступные плейлисты: ')
+        count = 1
+        for i in playlistslist:
+            print(f'{count})', i)
+        
+        os.chdir('..')
+        input()
+    
+    def makeplaylist(self):
+        os.chdir('playlists')
+        newplname = input('Введите название плейлиста: ')
+        try:
+            os.mkdir(newplname)
+        except OSError:
+            print('Такой плейлист уже есть')
+        
+        os.chdir('..')
+        
+        
+
+        
+
+    def delplaylist(self):
+        os.chmod('playlists', 0o777)
+        os.chdir('playlists')
+        
+        delplname = input('Введите название плейлиста: ')
+        
+        os.remove(delplname)
+        
+        
+        os.chdir('..')
+             
+
+
+    #метод для остановки и удаления а то че оно память засоряет
+    def stop_playing(self):
+        self.plsound.terminate()
+        try:
+            os.remove(self.final_filename)
+        except FileNotFoundError:
+            pass
+
+
+        
+class InterfaceClass(PlayerClass):
+    def __init__(self):
+        self.final_filename = None
+
     #метод для интерфейса
     def player_interface(self):
         while True:
@@ -41,8 +99,8 @@ class PlayerClass:
             print(*greet, sep="\n")
 
             #ну тип определние играет или не
-            if self.nowplaying and self.plsound.is_alive():
-                print('Сейчас играет/последнее, что играло: ', self.nowplaying)
+            if self.final_filename and self.plsound.is_alive():
+                print('Сейчас играет/последнее, что играло: ', self.final_filename)
                 print('4)Управление треком')
 
             #основные выборы
@@ -50,27 +108,41 @@ class PlayerClass:
 
             if option == 1:
                 self.play()
+            
+            
+            elif option == 2:
+                while True:
+                    optionl2pl = int(input('\n1)Создать плейлист  2)Удалить плейлист  3)Доступные плейлисты \n\nВыберите действие: '))
+                    if optionl2pl == 1:
+                        self.makeplaylist()
+
+                    elif optionl2pl == 2:
+                        self.delplaylist()
+
+                    elif optionl2pl == 3:
+                        self.playlists()
+
             elif option == 4:
                 #выбор че с треком делать
-                optionl2 = int(input('\n1)В лайки  2)В плейлист  3)Остановить воспроизведение \n\nВыберите действие: '))
-                #добавление в лайки
+                optionl2mn = int(input('\n1)В лайки  2)В плейлист  3)Остановить воспроизведение \n\nВыберите действие: '))
                 if optionl2 == 1:
-                    os.remove(self.nowplaying)
-                    self.music.downloadtrack_tofolder()
-
-                #остановка и удаление а то че оно память засоряет
+                    self.track_to_likes()
+                    
                 elif optionl2 == 3:
-                    self.plsound.terminate()
-                    os.remove(self.nowplaying)
+                    self.stop_playing()
                 
-             
-                
-            
+            elif option == 111:
+                print(os.getcwd())
+                time.sleep(5)
+
+
+
+
                 
 
 #до сих пор не понял смысл этой конструкции и вообще при каких условиях __name__ меняет имя
 if __name__ == '__main__':
-    igrok = PlayerClass()
+    igrok = InterfaceClass()
     igrok.player_interface() 
 
 

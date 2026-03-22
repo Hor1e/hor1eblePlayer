@@ -7,8 +7,8 @@ import os
 #папка
 folderlikes = 'likes'
 #создание папки если ее нет
-if not os.path.exists(folderlikes):
-    os.makedirs(folderlikes)
+if not os.path.exists(f'playlists/{folderlikes}'):
+    os.makedirs(f'playlists/{folderlikes}')
 
 #создание класса
 class MusicManager:
