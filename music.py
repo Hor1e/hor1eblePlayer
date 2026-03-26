@@ -103,14 +103,18 @@ class MusicManager:
                 
         }
         #само скачивание
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([self.link])
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([self.link])
 
-            #получение конечного названия файла после конвертации в вав
-            info = ydl.extract_info(self.link, download=False)
-            filepath = ydl.prepare_filename(info)
-            filename = os.path.basename(filepath)
-            self.final_filename = os.path.splitext(filename)[0] + ".wav"
+                #получение конечного названия файла после конвертации в вав
+                info = ydl.extract_info(self.link, download=False)
+                filepath = ydl.prepare_filename(info)
+                filename = os.path.basename(filepath)
+                self.final_filename = os.path.splitext(filename)[0] + ".wav"
+        except SSLError as a:
+            print(f'Произошла ошибка SSL({a}),\n Попробуйте еще раз.')
+
 
             
             

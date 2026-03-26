@@ -1,8 +1,8 @@
 #импорты
 from config import *
 from music import MusicManager
-from playsound3 import playsound as ps
-import multiprocessing
+from data import DbManager
+import vlc
 import time
 import os
 import shutil
@@ -19,21 +19,24 @@ class PlayerClass(MusicManager):
     #метод для нахождения и воспроизведения трека
     def play(self):
         track = input('Введите название трека: ')
-        if plsound and plsound.is_alive():
-            plsound.terminate()
         
         self.name = track
         super().downloadtrack()
+        p = vlc.MediaPlayer(self.final_filename)
+        p.audio_set_volume(volume)
+        time.sleep(1)
+        p.play()
         #включение музычки
-        plsound = multiprocessing.Process(target=ps, args=(self.final_filename,))
-        plsound.start()
-        self.plsound = plsound
+        #plsound = multiprocessing.Process(target=ps.MediaPlayer.play(), args=(self.final_filename,))
+        #plsound.start()
+        #self.plsound = plsound
     
     #метод для проигрывания музыки, которая уже скачана(в плейлисте)
     def play_alr_downloaded(self):
-        plsound = multiprocessing.Process(target=ps, args=(self.randtrack,))
-        plsound.start()
-        self.plsound = plsound
+        p = vlc.MediaPlayer(self.randtrack)
+        p.audio_set_volume(volume)
+        time.sleep(1)
+        p.play()
 
     #метод для перемещения в лайки
     def track_to_likes(self):
@@ -96,11 +99,17 @@ class PlayerClass(MusicManager):
         os.chdir('playlists')
         viborplaylista = input('Введите название плейлиста: ') 
         os.chdir(viborplaylista)
-        randlist = os.listdir()
-        self.randtrack = random.choice(randlist)
-        self.play_alr_downloaded()
+        
+        try:
+            randlist = os.listdir()
+            self.randtrack = random.choice(randlist)
+            self.play_alr_downloaded()
+        except IndexError:
+            print("Плейлист пуст")
         os.chdir('..')
         os.chdir('..')
+        time.sleep(1)
+        os.system('cls' if os.name == 'nt' else 'clear')
         
         
 
@@ -125,9 +134,9 @@ class InterfaceClass(PlayerClass):
             print(*greet, sep="\n")
 
             #ну тип определние играет или не
-            if self.final_filename and self.plsound.is_alive():
-                print('Сейчас играет/последнее, что играло: ', self.final_filename)
-                print('4)Управление треком')
+            #if self.final_filename and self.plsound.is_alive():
+             #   print('Сейчас играет/последнее, что играло: ', self.final_filename)
+              #2  print('4)Управление треком')
 
             #основные выборы
             option = int(input('\n1)Найти трек  2)Плейлисты  3)Экспорт/Импорт плейлиста 5)Выход \n\nВыберите действие: '))
@@ -179,6 +188,8 @@ class InterfaceClass(PlayerClass):
 
 #до сих пор не понял смысл этой конструкции и вообще при каких условиях __name__ меняет имя
 if __name__ == '__main__':
+    db = DbManager('databasewithplaylists')
+    db.create_table_likes()
     try:
         igrok = InterfaceClass()
         igrok.player_interface()
