@@ -15,6 +15,7 @@ class MusicManager:
     #инит
     def __init__(self, name):
         self.name = name
+        self.folder = None
         
         
         
@@ -99,7 +100,7 @@ class MusicManager:
                 'preferredcodec': 'wav',
                 'preferredquality': '192',
             }],
-            'outtmpl': f'{folderlikes}/%(title)s.%(ext)s',
+            'outtmpl': f'{self.folder}/%(title)s.%(ext)s',
                 
         }
         #само скачивание
